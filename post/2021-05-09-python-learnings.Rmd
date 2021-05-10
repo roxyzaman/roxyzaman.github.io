@@ -7,6 +7,10 @@ categories: []
 tags: []
 description: ''
 ---
+
+![The Loves of My Life](/post/2021-05-09-python-learnings_files/Suki.jpg){width=350px height=400px}
+<figcaption>^ The Loves of My Life</figcaption>
+
 <h2>INTRO</h2>
 
 Throughout my journey learning coding in different languages, I often relate it to my personal journey learning different spoken languages. Although I grew up in the traditional Texas suburb, inside the walls of my house was a diverse and exciting mix of heritage. My parents prioritized learning English, however, I felt a piece of my identity as a multiracial woman missing as I could speak little Spanish and even less Bengali. I challenged myself to take time to practice with my relatives and even take classes to master both languages. Now being trilangual, I appreciate the ability to communicate to a wide range of people. Coding in different languages is the same concept! Learning R and Python is only the beginning of my coding journey but I have learned what feels like a textbook's worth of applicable information. Today, I am going to show you the progress of my coding journey by including the product of my spoken language journey!
