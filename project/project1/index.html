@@ -7,7 +7,7 @@
     <meta name="author" content="Roxana Zaman" />
     
     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
-    <title>Project 1</title>
+    <title>Project 1: Exploratory Data Analysis</title>
     <meta name="generator" content="Hugo 0.83.1" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../../css/main.css" />
@@ -54,13 +54,13 @@
       <div class="container">
         <div class="blog-post">
           <h3>
-            <strong><a href="../../project/project1/">Project 1</a></strong>
+            <strong><a href="../../project/project1/">Project 1: Likelihood of Vaccination based on 2020 Presidential Election Results by Texas County</a></strong>
           </h3>
         </div>
  
 <div class="blog-title">
           <h4>
-         December 1, 2020 
+         April 6, 2021
             &nbsp;&nbsp;
             
           </h4>
@@ -72,8 +72,398 @@
               
 
 
-<div id="test-project-1" class="section level2">
-<h2>Test Project 1</h2>
+<div id="data-wrangling-and-data-exploration" class="section level2">
+<h2>Data Wrangling and Data Exploration</h2>
+<div id="instructions" class="section level3">
+<h3>Instructions</h3>
+<p>A knitted R Markdown document (ideally HTML) and the raw R Markdown file (as .Rmd) should both be submitted to Canvas by 11:59pm on the due date. These two documents will be graded jointly, so they must be consistent (i.e., don’t change the R Markdown file without also updating the knitted document).</p>
+<p>The text of the document should provide a narrative structure around your code/output. All results presented must have corresponding code. Any answers/results/plots etc. given without the corresponding R code that generated the result will not be considered. Furthermore, all code contained in your final project document must work correctly (knit early, knit often)! Please do not include any extraneous code or code which produces error messages. (Code that produces warnings is acceptable, as long as you understand what the warnings mean!)</p>
+</div>
+<div id="find-data" class="section level3">
+<h3>Find data:</h3>
+<p>Find two (!) datasets with one variable in common (e.g., dates, times, states, counties, countries, sports players), both with at least 50 observations (i.e., rows) in each. Please think very carefully about whether it makes sense to combine your datasets! If you find one dataset with 50 patients and it has their age, and you find another dataset with 50 <em>different</em> patients that has their ages, it makes no sense to join them based on age (you would just be pairing up random people of the same age).</p>
+<p>When combined, the resulting/final dataset must have <strong>at least 4 different variables (at least 3 numeric) in addition to the common variable</strong> (i.e., five variables total).</p>
+<p>You can have as many variables as you would like! If you found two datasets that you like but they don’t have enough variables, find a third dataset with the same common variable and join all three.</p>
+</div>
+<div id="guidelines" class="section level3">
+<h3>Guidelines</h3>
+<ol style="list-style-type: decimal">
+<li><p>If the datasets are not tidy, you will need to reshape them so that every observation has its own row and every variable its own column. If the datasets are both already tidy, you will make them untidy with <code>pivot_wider()/spread()</code> and then tidy them again with <code>pivot_longer/gather()</code> to demonstrate your use of the functions. It’s fine to wait until you have your descriptives to use these functions (e.g., you might want to pivot_wider() to rearrange the data to make your descriptive statistics easier to look at); it’s fine long as you use them at least once!</p>
+<ul>
+<li><p>Depending on your datasets, it might be a good idea to do this before joining. For example, if you have a dataset you like with multiple measurements per year, but you want to join by year, you could average over your numeric variables to get means/year, do counts for your categoricals to get a counts/year, etc.</p></li>
+<li><p>If your data sets are already tidy, demonstrate the use of <code>pivot_longer()/gather()</code> and <code>pivot_wider()/spread()</code> on all or part of your data at some point in this document (e.g., after you have generated summary statistics in part 3, make a table of them wide instead of long).</p></li>
+</ul></li>
+<li><p>Join your 2+ separate data sources into a single dataset based on a common ID variable! If you can’t find a good pair datasets to join, you may split one main dataset into two different datasets with a common ID variable in each, and then join them back together based on that common ID, but this is obviously less than ideal.</p>
+<ul>
+<li>You will document the type of join that you do (left/right/inner/full), including a discussion of how many observations were in each dataset, which observations in each dataset were dropped (if any) and why you chose this particular join.</li>
+</ul></li>
+<li><p>Create summary statistics</p>
+<ul>
+<li><p>Use <em>all six</em> core <code>dplyr</code> functions (<code>filter, select, arrange, group_by, mutate, summarize</code>) to manipulate and explore your dataset. For mutate, create a new variable that is a function of at least one other variable, preferably using a dplyr vector function (see dplyr cheatsheet). It’s totally fine to use the <code>_if</code>, <code>_at</code>, <code>_all</code> versions of mutate/summarize instead (indeed, it is encouraged if you have lots of variables)</p></li>
+<li><p>Create summary statistics (<code>mean, sd, var, n, quantile, min, max, n_distinct, cor</code>, etc) for each of your numeric variables both overall and after grouping by one of your categorical variables (either together or one-at-a-time; if you have two categorical variables, try to include at least one statistic based on a grouping of two categorical variables simultaneously). If you do not have any categorical variables, create one using mutate (e.g., with <code>case_when</code> or <code>ifelse</code>) to satisfy the <code>group_by</code> requirements above. Ideally, you will find a way to show these summary statistics in an easy-to-read table (e.g., by reshaping). (You might explore the kable package for making pretty tables!) If you have lots of numeric variables (e.g., 10+), or your categorical variables have too many categories, just pick a few (either numeric variables or categories of a categorical variable) and summarize based on those. It would be a good idea to show a correlation matrix for your numeric variables (you will need it to make one of your plots).</p></li>
+</ul></li>
+<li><p>Make visualizations (three plots)</p>
+<ul>
+<li>Make a correlation heatmap of your numeric variables</li>
+<li>Create at least two additional plots of your choice with ggplot that highlight some of the more interesting features of your data.</li>
+<li>Each plot (besides the heatmap) should have at least three variables mapped to separate aesthetics</li>
+<li>Each should use different geoms (e.g., don’t do two geom_bars)</li>
+<li>At least one plot should include <code>stat="summary"</code></li>
+<li>Each plot should include a supporting paragraph describing the relationships that are being visualized and any trends that are apparent
+<ul>
+<li>It is fine to include more, but limit yourself to 4. Plots should avoid being redundant! Four bad plots will get a lower grade than two good plots, all else being equal.</li>
+</ul></li>
+<li>Make them pretty! Use correct labels, etc.</li>
+</ul></li>
+<li><p>Perform k-means/PAM clustering or PCA on (at least) your numeric variables.</p>
+<ul>
+<li><p>Include all steps as we discuss in class, including a visualization.</p></li>
+<li><p>If you don’t have at least 3 numeric variables, or you want to cluster based on categorical variables too, convert them to factors in R, generate Gower’s dissimilarity matrix on the data, and do PAM clustering on the dissimilarities.</p></li>
+<li><p>Show how you chose the final number of clusters/principal components</p></li>
+<li><p>Interpret the final clusters/principal components</p></li>
+<li><p>For every step, document what your code does (in words) and what you see in the data!</p></li>
+</ul></li>
+</ol>
+<P style="page-break-before: always">
+<div style="page-break-after: always;"></div>
+</div>
+<div id="rubric" class="section level3">
+<h3>Rubric</h3>
+<p>Prerequisite: Finding appropriate data from at least two sources per the instructions above: Failure to do this will result in a 0! You will submit a .Rmd file and a knitted document (html/pdf).</p>
+<div id="introduction-5-pts" class="section level4">
+<h4>0. Introduction (5 pts)</h4>
+<p>#The data sets I have chosen surround two relatively current events: the ongoing Corona Virus Pandemic and the 2020 US Presidential Election. The data sets I joined were COVID-19 vaccines administered per Texas county and how many votes went to the Democratic presidential candidate, Joe Biden, and the Republican presidential candidate, Donald Trump, per Texas county. The vaccine data includes which Texas counties administered vaccines, how many each county in the data has administered, how many people either have had at least their first dose, and how many people are fully vaccinated. The voting data includes how many votes went to each candidate in each county and the percentage of votes each candidate held per county. My sources for the vaccine data are from the Texas Department of State Health, which is updated daily. I chose to get the data for the presidential votes from Politico becaue it is recognized as an unbiased and statistic-focused news outlet.</p>
+<p>#I chose these data sets because I was curious to see if there was a trend between political preference and the likelihood of getting the vaccine. For example, I wanted to know if a county that voted mostly for Biden would be more likely to get the vaccine and vise versa if a county voted mostly for Trump. In today’s political climate, I tend to associate people with conservative views to be less likely to get the vaccine because of doubt shrouding the virus and misinformation. Whereas, those who vote for Biden may have political views that would lead them to be more trusting of the science behind the vaccine, thus more willing to get vaccinated. However, I recognize that there were Republicans who voted for Biden and maybe traditional Democrats who voted for Trump, so there may be a lot of correlation between the data. It’s flawed to solely base the likelihood of someone getting a vaccine on their political views/political party affiliation. However, I would like to see if there is a trend after all! I think there will at least be a positive correlation between those counties who mainly voted for Biden and their likelihood to become vaccinated at the very least. There may not be a trend between counties that voted mostly for Trump and their likelihood to get a vaccine or not because there are so many factors that affect the total number of vaccines a community can administer such as the number of pharmacies, number of people who are available/qualified to administer the vaccine, individuals’ access to transportation to these vaccine administration sites, and more. I am excited to see what information I can get from the data!</p>
+</div>
+<div id="tidying-rearranging-widelong-10-pts" class="section level4">
+<h4>1. Tidying: Rearranging Wide/Long (10 pts)</h4>
+<ul>
+<li>Tidy the datasets (using the <code>tidyr</code> functions <code>pivot_longer</code>/<code>gather</code> and/or <code>pivot_wider</code>/<code>spread</code>)</li>
+<li>If you data sets are already tidy, be sure to use those functions somewhere else in your project (e.g., for rearranging summary statistics)</li>
+<li>Document the process (describe in words what was done)</li>
+</ul>
+<pre class="r"><code>library(&quot;dplyr&quot;)
+library(&quot;tidyr&quot;)
+library(readxl)
+library(&quot;tibble&quot;)
+library(&quot;ggplot2&quot;)
+
+Cumulative_Tests_by_Type_by_County &lt;- read_excel(&quot;Cumulative Tests by Type by County.xlsx&quot;)
+Voting_data &lt;- Cumulative_Tests_by_Type_by_County
+Voting_data &lt;- subset(Voting_data, select = -c(6, 7, 8))
+
+Covid_data &lt;- read_excel(&quot;Covid data.xlsx&quot;)
+
+# Covid_data &lt;- subset(Covid_data, select = c(-Zip_Code))
+
+Covid_data &lt;- Covid_data %&gt;% mutate(across(where(is.character), 
+    ~na_if(., &quot;**&quot;)))
+
+# tidying data
+Covid_data$Vaccine_Doses &lt;- as.numeric(Covid_data$Vaccine_Doses)
+Covid_data$People_with_One_Dose &lt;- as.numeric(Covid_data$People_with_One_Dose)
+Covid_data$People_Fully_Vaccinated &lt;- as.numeric(Covid_data$People_Fully_Vaccinated)
+
+
+Clean_Covid_Data &lt;- aggregate(cbind(Vaccine_Doses, People_with_One_Dose, 
+    People_Fully_Vaccinated) ~ County, data = Covid_data, FUN = &quot;sum&quot;)</code></pre>
+<p>#First, I renamed the data for ease of use for later in the project. Then, I removed all of the ** data and replaced them with NA. Then, I turned the character data that was used in my COVID data set into numeric data. Finally, I used aggregate in order to turn all of the separated county data into a single row for each county in Texas.</p>
+</div>
+<div id="joiningmerging-10-pts" class="section level4">
+<h4>2. Joining/Merging (10 pts)</h4>
+<ul>
+<li>Join your datasets into one using a <code>dplyr</code> join function</li>
+<li>If you have multiple observations on the joining variable in either dataset, fix this by collapsing via summarize</li>
+<li>Discuss the process in words, including why you chose the join you did</li>
+<li>Discuss which cases were dropped, if any, and potential problems with this</li>
+</ul>
+<pre class="r"><code>joined_data &lt;- inner_join(Clean_Covid_Data, Voting_data, by = c(County = &quot;County&quot;))</code></pre>
+<p>#I used inner join so that I would only be including data that is present in both the COVID dataset and the voting data set. There were a few counties that were dropped, since they did not have data in both datasets. This could cause an issue as now not all of the counties are being represented.</p>
+</div>
+<div id="wrangling-40-pts" class="section level4">
+<h4>3. Wrangling (40 pts)</h4>
+<ul>
+<li>Use all six core <code>dplyr</code> functions in the service of generating summary tables/statistics (12 pts)
+<ul>
+<li>Use mutate at least once to generate a variable that is a function of at least one other variable</li>
+</ul></li>
+<li>Compute summary statistics for each of your variables using <code>summarize</code> alone and with <code>group_by</code> (if you have more than 10 variables, fine to just focus on 10) (20 pts)
+<ul>
+<li>Use at least 5 unique functions inside of summarize (e.g., mean, sd)</li>
+<li>For at least 2, use summarize after grouping by a categorical variable. Create one by dichotomizing a numeric if necessary</li>
+<li>If applicable, at least 1 of these should group by two categorical variables</li>
+</ul></li>
+<li>Summarize the procedure and discuss all (or the most interesting) results in no more than two paragraphs (8 pts)</li>
+</ul>
+<pre class="r"><code># creating a new variable that represents the number of
+# vaccine doses over the total voting popluation, it is
+# assumed that this variable will correlate with number of
+# Biden votes
+
+joined_data &lt;- joined_data %&gt;% mutate(proportion = Vaccine_Doses/(`TRUMP VOTES` + 
+    `BIDEN VOTES`))
+
+# Creating variables that represent if the counties are
+# majority Biden or almost entirely Trump
+joined_data &lt;- joined_data %&gt;% mutate(biden_majority = ifelse(`BIDEN PCT` &gt; 
+    0.5, TRUE, FALSE))
+joined_data &lt;- joined_data %&gt;% mutate(mostly_trump = ifelse(`BIDEN PCT` &lt; 
+    0.2, TRUE, FALSE))
+
+# Sorting the data in order of this new proportion
+joined_data %&gt;% arrange(proportion) %&gt;% head()</code></pre>
+<pre><code>##       County Vaccine_Doses People_with_One_Dose People_Fully_Vaccinated
+## 1     Hardin           179                  107                      72
+## 2      Llano            90                   58                      33
+## 3    Sherman            16                    9                       7
+## 4 Williamson         10199                 7799                    2753
+## 5    Haskell           116                   67                      51
+## 6 Washington           932                  570                     389
+##   TRUMP VOTES TRUMP PCT BIDEN VOTES BIDEN PCT  proportion biden_majority
+## 1       23858     0.863        3474     0.126 0.006549100          FALSE
+## 2       10079     0.796        2465     0.195 0.007174745          FALSE
+## 3         886     0.894          91     0.092 0.016376663          FALSE
+## 4      139729     0.483      143795     0.497 0.035972263          FALSE
+## 5        1840     0.831         353     0.159 0.052895577          FALSE
+## 6       12959     0.744        4261     0.245 0.054123113          FALSE
+##   mostly_trump
+## 1         TRUE
+## 2         TRUE
+## 3         TRUE
+## 4        FALSE
+## 5         TRUE
+## 6        FALSE</code></pre>
+<pre class="r"><code>joined_data %&gt;% select(County, proportion, Vaccine_Doses, `BIDEN VOTES`, 
+    `TRUMP VOTES`)</code></pre>
+<pre><code>##      County proportion Vaccine_Doses BIDEN VOTES TRUMP VOTES
+## 1  Anderson 0.53768686         10251        3955       15110
+## 2  Angelina 0.80268272         27467        9143       25076
+## 3    Archer 0.52549515          2494         446        4300
+## 4    Austin 0.60036116          8644        2951       11447
+## 5    Baylor 1.13893858          1910         183        1494
+## 6      Bell 0.61955695         77387       57014       67893
+## 7    Bosque 0.83067553          7501        1561        7469
+## 8     Bowie 0.63230595         23941       10747       27116
+## 9  Brazoria 0.06337571          9675       62228       90433
+## 10    Brown 0.70085416         11077        2107       13698
+## 11 Callahan 0.08197450           553         734        6012
+## 12     Camp 0.81195219          4076        1394        3626
+## 13     Cass 0.54245010          7501        2795       11033
+## 14 Cherokee 0.55595257         10736        4210       15101
+## 15     Clay 0.63346824          3600         614        5069
+## 16     Coke 0.68480726          1208         178        1586
+## 17  Coleman 0.61999022          2537         451        3641
+## 18   Collin 0.87859613        424593      230945      252318
+## 19 Colorado 0.26152446          2587        2420        7472
+## 20 Comanche 0.79950249          4821         853        5177
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 98 rows ]</code></pre>
+<pre class="r"><code># Calculating the mean/max values of this proportion
+# separated by whether the county is Biden majority or not
+joined_data %&gt;% group_by(biden_majority) %&gt;% summarize(mean = mean(proportion))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   biden_majority  mean
+##   &lt;lgl&gt;          &lt;dbl&gt;
+## 1 FALSE          0.652
+## 2 TRUE           0.916</code></pre>
+<pre class="r"><code>joined_data %&gt;% group_by(biden_majority) %&gt;% summarize(max = max(proportion))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   biden_majority   max
+##   &lt;lgl&gt;          &lt;dbl&gt;
+## 1 FALSE           1.51
+## 2 TRUE            1.04</code></pre>
+<pre class="r"><code># Calculating the mean values of the number of people with
+# one dose/people fully vaccinated separated by whether the
+# county is Biden majority
+joined_data %&gt;% group_by(biden_majority) %&gt;% summarize(mean = mean(People_with_One_Dose))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   biden_majority    mean
+##   &lt;lgl&gt;            &lt;dbl&gt;
+## 1 FALSE           17342.
+## 2 TRUE           507228.</code></pre>
+<pre class="r"><code>joined_data %&gt;% group_by(biden_majority) %&gt;% summarize(mean = mean(People_Fully_Vaccinated))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   biden_majority    mean
+##   &lt;lgl&gt;            &lt;dbl&gt;
+## 1 FALSE            9175.
+## 2 TRUE           248637.</code></pre>
+<pre class="r"><code># Number of counties
+joined_data %&gt;% summarize(n = n())</code></pre>
+<pre><code>##     n
+## 1 118</code></pre>
+<pre class="r"><code># Quantiles of percentage of Trump votes by county
+joined_data %&gt;% summarize(quantile = quantile(`TRUMP PCT`))</code></pre>
+<pre><code>##   quantile
+## 1  0.31600
+## 2  0.71725
+## 3  0.79500
+## 4  0.83675
+## 5  0.91400</code></pre>
+<pre class="r"><code># SD of Biden Votes
+joined_data %&gt;% summarize(sd = sd(`BIDEN VOTES`))</code></pre>
+<pre><code>##         sd
+## 1 111914.2</code></pre>
+<pre class="r"><code># Mean of Biden Votes
+joined_data %&gt;% summarize(mean = mean(`BIDEN VOTES`))</code></pre>
+<pre><code>##       mean
+## 1 29429.35</code></pre>
+<pre class="r"><code># Mean of Trump Votes
+joined_data %&gt;% summarize(mean = mean(`TRUMP VOTES`))</code></pre>
+<pre><code>##       mean
+## 1 33617.39</code></pre>
+<pre class="r"><code># Altering the data for a future split
+joined_data$biden_majority = ifelse(joined_data$biden_majority == 
+    TRUE, &quot;Biden&quot;, &quot;Trump&quot;)
+TrumpBidenSplit &lt;- joined_data %&gt;% pivot_wider(names_from = biden_majority, 
+    values_from = Vaccine_Doses)
+
+# Getting the mean number of vaccine doses for Trump/Biden
+# majority counties
+mean(TrumpBidenSplit$Trump, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 25843.32</code></pre>
+<pre class="r"><code>mean(TrumpBidenSplit$Biden, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 739738.2</code></pre>
+<pre class="r"><code># Getting the maximum number of vaccine doses for Biden
+# majority/Mostly Trump counties
+joined_data %&gt;% filter(`BIDEN PCT` &lt; 0.2) %&gt;% summarize(max = max(Vaccine_Doses))</code></pre>
+<pre><code>##     max
+## 1 43580</code></pre>
+<pre class="r"><code>joined_data %&gt;% filter(`BIDEN PCT` &gt; 0.5) %&gt;% summarize(max = max(Vaccine_Doses))</code></pre>
+<pre><code>##       max
+## 1 1492466</code></pre>
+<pre class="r"><code># Creating correlation matrix
+cor_mtx &lt;- joined_data %&gt;% select_if(is.numeric) %&gt;% cor()</code></pre>
+<p>#I created two categorical variable using mutate - biden_majority will result in true if the percentage of Biden votes is greater than 50%, and mostly_trump will result in true if the proportion of Trump votes is more than 80%. I’ve noted that the average number of vaccine doses in Biden majority counties is 738738.2, while the corresponding average for Trump counties is 25842.32. This could be due to the fact that the Biden counties have much higher population than the Trump counties, but it is worth noting how much smaller the average number of doses is in Trump counties. In terms of just voting statistics, it can be seen that there is a massive standard deviation for number of Biden votes, which could be attributed to both the massive difference in population in counties and the fact that the counties with large populations tended to have a much higher percentage of Biden votes.</p>
+</div>
+<div id="visualizing-30-pts" class="section level4">
+<h4>4. Visualizing (30 pts)</h4>
+<ul>
+<li><p>Create a correlation heatmap of your numeric variables the way we did in class</p></li>
+<li><p>Create two more effective, polished plots with ggplot</p>
+<ul>
+<li>Each plot should map 3+ variables to aesthetics</li>
+<li>Each plot should have a title and clean labeling for all mappings</li>
+<li>Change at least one default theme element and color for at least one mapping per plot</li>
+<li>For at least one plot, add more tick marks (x, y, or both) than are given by default</li>
+<li>For at least one plot, use the stat=“summary” function</li>
+<li>Supporting paragraph or two (for each plot) describing the relationships/trends that are apparent</li>
+</ul></li>
+</ul>
+<pre class="r"><code>tidycor &lt;- cor_mtx %&gt;% as.data.frame %&gt;% rownames_to_column(&quot;var1&quot;) %&gt;% 
+    pivot_longer(-1, names_to = &quot;var2&quot;, values_to = &quot;correlation&quot;)
+
+tidycor %&gt;% ggplot(aes(var1, var2, fill = correlation)) + geom_tile() + 
+    scale_fill_gradient2(low = &quot;red&quot;, mid = &quot;white&quot;, high = &quot;blue&quot;) + 
+    geom_text(aes(label = round(correlation, 2)), color = &quot;black&quot;, 
+        size = 3) + theme(axis.text.x = element_text(angle = 90, 
+    hjust = 1)) + coord_fixed()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(joined_data, aes(x = `TRUMP VOTES`, Vaccine_Doses)) + 
+    geom_point(aes(color = `TRUMP PCT`)) + labs(title = &quot;Number of Vaccine Doses based on Number of Trump Votes&quot;, 
+    x = &quot;Number of Trump Votes&quot;, y = &quot;Vaccine Doses&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(joined_data, aes(`BIDEN VOTES`)) + geom_line(aes(y = Vaccine_Doses, 
+    color = &quot;blue&quot;)) + geom_line(aes(y = People_with_One_Dose, 
+    color = &quot;green&quot;)) + geom_line(aes(y = People_Fully_Vaccinated, 
+    color = &quot;red&quot;)) + labs(title = &quot;Number of Doses in Relation to Number of Biden Votes&quot;, 
+    x = &quot;Number of Biden Votes&quot;, y = &quot;Vaccine Doses&quot;) + scale_color_discrete(name = &quot;Dosage Lines&quot;, 
+    labels = c(&quot;Total Doses&quot;, &quot;People with One Dose&quot;, &quot;People Fully Vaccinated&quot;)) + 
+    scale_x_continuous(n.breaks = 6) + theme(axis.text = element_text(colour = &quot;darkblue&quot;, 
+    size = rel(0.75)))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>#First, I display a correlation heat map between each of my numeric variables. There is a higher correlation between Biden votes and vaccine doses than that between Trump votes and number of vaccine doses. However, this difference is so small that it appears that both Biden and Trump votes could potentially be used to model the number of vaccine doses for a county.</p>
+<p>#The first plot displays the number of vaccine doses in each county plotted against the number of votes for Donald Trump. In addition, each county is colored by percentage of Donald Trump votes. This plot displays the trend that counties with higher percentage of Trump votes tend to have a lower number of total doses. However, this may be misconstrued by the limited population size for each county.</p>
+<p>#The second plot displays the number of vaccine doses in each county plotted against the number of votes for Joe Biden. The lines are separated into total doses, people with a single dose, and people that are fully vaccinated. The general trend of this plot shows that the higher number of Biden votes there are, there will be higher number of total vaccine doses. However, this is also limited by the lack of total population data in the dataset.</p>
+</div>
+<div id="dimensionality-reduction-30-pts" class="section level4">
+<h4>5. Dimensionality Reduction (30 pts)</h4>
+<ul>
+<li><p>Either k-means/PAM clustering or PCA (inclusive “or”) should be performed on at least three of your variables (3 is just the minimum: using more/all of them will make this much more interesting!)</p>
+<ul>
+<li>All relevant steps discussed in class (e.g., picking number of PCs/clusters)</li>
+<li>A visualization of the clusters or the first few principal components (using ggplot2)</li>
+<li>Supporting paragraph or two describing results found, interpreting the clusters/PCs in terms of the original variables and observations, discussing goodness of fit or variance explained, etc.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>joined_nums &lt;- joined_data %&gt;% select_if(is.numeric) %&gt;% scale
+rownames(joined_nums) &lt;- joined_data$County
+joined_pca &lt;- princomp(joined_nums)
+names(joined_pca)</code></pre>
+<pre><code>## [1] &quot;sdev&quot;     &quot;loadings&quot; &quot;center&quot;   &quot;scale&quot;    &quot;n.obs&quot;    &quot;scores&quot;   &quot;call&quot;</code></pre>
+<pre class="r"><code>summary(joined_pca, loadings = TRUE)</code></pre>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2    Comp.3      Comp.4      Comp.5
+## Standard deviation     2.4402539 0.9982904 0.9533356 0.237215136 0.111886310
+## Proportion of Variance 0.7507169 0.1256377 0.1145771 0.007093996 0.001578193
+## Cumulative Proportion  0.7507169 0.8763546 0.9909317 0.998025675 0.999603867
+##                              Comp.6       Comp.7       Comp.8
+## Standard deviation     0.0531969954 1.738275e-02 3.181811e-03
+## Proportion of Variance 0.0003567635 3.809281e-05 1.276306e-06
+## Cumulative Proportion  0.9999606309 9.999987e-01 1.000000e+00
+## 
+## Loadings:
+##                         Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7 Comp.8
+## Vaccine_Doses            0.397  0.146  0.171  0.199  0.271  0.207         0.798
+## People_with_One_Dose     0.398  0.141  0.167  0.208  0.215  0.635        -0.549
+## People_Fully_Vaccinated  0.395  0.158  0.182  0.188  0.380 -0.737        -0.250
+## TRUMP VOTES              0.392         0.174 -0.900                            
+## TRUMP PCT               -0.321  0.454  0.436                      -0.707       
+## BIDEN VOTES              0.399         0.170  0.258 -0.854 -0.104              
+## BIDEN PCT                0.321 -0.452 -0.436                      -0.707       
+## proportion                      0.718 -0.686</code></pre>
+<pre class="r"><code>joined_df &lt;- data.frame(Name = joined_data$County, PC1 = joined_pca$scores[, 
+    1], PC2 = joined_pca$scores[, 2])
+ggplot(joined_df, aes(PC1, PC2)) + geom_point()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
+#Using this PCA, I would select only the first two principle components, as together they explain almost 99% of the variance within the data. The first component appears to be a linear combination using .4 of almost every single variable, with percentage of Trump votes taking a negative coefficient. The major difference between the first and second PC appears the be the coefficient associated with percentage of Trump votes.</p>
+</div>
+<div id="neatness-holisticdiscretionary-points-5-pts" class="section level4">
+<h4>6. Neatness, Holistic/Discretionary Points (5 pts)</h4>
+<ul>
+<li>Keep things looking nice! Your project should not knit to more than 30 or so pages (probably closer to 10-20)! You will lose points if you print out your entire dataset(s), have terrible formatting, etc. If you start your project in a fresh .Rmd file, you are advised to copy set-up code below and include it: this will do things like automatically truncate if you accidentally print out a huge dataset, etc. Imagine this is a polished report you are giving to your PI or boss to summarize your work researching a topic.</li>
+</ul>
+<pre class="r"><code>## paste this chunk into the ```{r setup} chunk at the top of
+## your project 1 .Rmd file
+
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = &quot;center&quot;, 
+    warning = F, message = F, tidy = TRUE, tidy.opts = list(width.cutoff = 60), 
+    R.options = list(max.print = 100))</code></pre>
+</div>
+</div>
+<div id="where-do-i-find-data" class="section level3">
+<h3>Where do I find data?</h3>
+<p>OK, brace yourself!</p>
+<p>You can choose ANY datasets you want that meet the above criteria for variables and observations. I’m just sitting here but off the top of my head, if you are into amusement parks, you could look at amusement-park variables, including ticket sales per day etc.; then you could join this by date in weather data. If you are interested in Game of Thrones, you could look at how the frequency of mentions of character names (plus other character variables) and the frequency of baby names in the USA…You could even take your old Biostats data and merge in new data (e.g., based on a Google forms timestamp).</p>
+<p>You could engage in some “me-search”: You can <a href="https://support.spotify.com/ca-en/article/data-rights-and-privacy-settings/">request your Spotify data</a> or <a href="https://help.netflix.com/en/node/101917">download Netflix viewing activity</a>, Amazon purchase history, etc. You can use your Google Fit/Fitbit/Apple watch data, etc. These can be combined (e.g., with each other, with other data sources).</p>
+<p>You can make it as serious as you want, or not, but keep in mind that you will be incorporating this project into a portfolio webpage for your final in this course, so choose something that really reflects who you are, or something that you feel will advance you in the direction you hope to move career-wise, or something that you think is really neat. On the flip side, regardless of what you pick, you will be performing all the same tasks, so it doesn’t end up being that big of a deal.</p>
+<p>If you are totally clueless and have no direction at all, log into the server and type</p>
+<pre class="r"><code>data(package = .packages(all.available = TRUE))</code></pre>
+<p>This will print out a list of <strong>ALL datasets in ALL packages</strong> installed on the server (a ton)! Scroll until your eyes bleed! Actually, do not scroll that much… To start with something more manageable, just run the command on your own computer, or just run <code>data()</code> to bring up the datasets in your current environment. To read more about a dataset, do <code>?packagename::datasetname</code>.</p>
+<p>If it is easier for you, and in case you don’t have many packages installed, a list of R datasets from a few common packages (also downloadable in CSV format) is given at the following website: <a href="https://vincentarelbundock.github.io/Rdatasets/datasets.html" class="uri">https://vincentarelbundock.github.io/Rdatasets/datasets.html</a> (including types/numbers of variables in each)</p>
+<ul>
+<li><p>A good package to download for fun/relevant data is <code>fivethiryeight</code>. Just run <code>install.packages("fivethirtyeight"), load the packages with</code>library(fivethirtyeight)<code>, run</code>data()`, and then scroll down to view the datasets. Here is an online list of all 127 datasets (with links to the 538 articles). Lots of sports, politics, current events, etc: <a href="https://cran.r-project.org/web/packages/fivethirtyeight/vignettes/fivethirtyeight.html" class="uri">https://cran.r-project.org/web/packages/fivethirtyeight/vignettes/fivethirtyeight.html</a></p></li>
+<li><p>If you have already started to specialize (e.g., ecology, epidemiology) you might look at discipline-specific R packages (vegan, epi, respectively). We will be using some tools from these packages later in the course, but they come with lots of data too, which you can explore according to the directions above</p></li>
+<li><p>However, you <em>emphatically DO NOT</em> have to use datasets available via R packages! In fact, I would much prefer it if you found the data from completely separate sources and brought them together (a much more realistic experience in the real world)! You can even reuse data from your SDS328M project, provided it shares a variable in common with other data which allows you to merge the two together (e.g., if you still had the timestamp, you could look up the weather that day: <a href="https://www.wunderground.com/history/" class="uri">https://www.wunderground.com/history/</a>). If you work in a research lab or have access to old data, you could potentially merge it with new data from your lab!</p></li>
+<li><p>Here is a curated list of interesting datasets (read-only spreadsheet format): <a href="https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit" class="uri">https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit</a></p></li>
+<li><p>Here is another great compilation of datasets: <a href="https://github.com/rfordatascience/tidytuesday" class="uri">https://github.com/rfordatascience/tidytuesday</a></p></li>
+<li><p>Here is the UCI Machine Learning Repository: <a href="https://archive.ics.uci.edu/ml/index.php" class="uri">https://archive.ics.uci.edu/ml/index.php</a></p>
+<ul>
+<li>See also <a href="https://en.wikipedia.org/wiki/List_of_datasets_for_machine-learning_research#Biological_data" class="uri">https://en.wikipedia.org/wiki/List_of_datasets_for_machine-learning_research#Biological_data</a></li>
+</ul></li>
+<li><p>Here is another good general place to look: <a href="https://www.kaggle.com/datasets" class="uri">https://www.kaggle.com/datasets</a></p></li>
+<li><p>To help narrow your search down or to see interesting variable ideas, check out <a href="https://www.tylervigen.com/spurious-correlations" class="uri">https://www.tylervigen.com/spurious-correlations</a>. This is the spurious correlations website, and it is fun, but if you look at the bottom of each plot you will see sources for the data. This is a good place to find very general data (or at least get a sense of where you can scrape data together from)!</p></li>
+<li><p>If you are interested in medical data, check out www.countyhealthrankings.org</p></li>
+<li><p>If you are interested in scraping UT data, the university makes <em>loads</em> of data public (e.g., beyond just professor CVs and syllabi). Check out all the data that is available in the statistical handbooks: <a href="https://reports.utexas.edu/statistical-handbook" class="uri">https://reports.utexas.edu/statistical-handbook</a></p></li>
+</ul>
+<div id="broader-data-sources" class="section level5">
+<h5>Broader data sources:</h5>
+<p><a href="www.data.gov">Data.gov</a> 186,000+ datasets!</p>
+<p><a href="Social%20Explorer">Social Explorer</a> is a nice interface to Census and American Community Survey data (more user-friendly than the government sites). May need to sign up for a free trial.</p>
+<p><a href="www.bls.gov">U.S. Bureau of Labor Statistics</a></p>
+<p><a href="www.census.gov">U.S. Census Bureau</a></p>
+<p><a href="www.gapminder.org/data">Gapminder</a>, data about the world.</p>
+<p>…</p>
+</div>
+</div>
 </div>
 
             

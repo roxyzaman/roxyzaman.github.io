@@ -1,0 +1,12 @@
+---
+title: Project 1
+author: ''
+date: '2021-05-09'
+slug: project-1
+categories: []
+tags: []
+description: ''
+---
+Here is a link to my first project:
+
+<i class="fa fa-signal"></i> &nbsp; [Link to project 1](/project/project1/)
